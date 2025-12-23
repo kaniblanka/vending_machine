@@ -15,6 +15,9 @@ public class UniversalArrayImpl<T> implements UniversalArray<T> {
 
     @Override
     public T get(int index) {
+        if (index < 0 || index >= array.length) {
+            throw new IndexOutOfBoundsException();
+        }
         return (T) array[index];
     }
 
