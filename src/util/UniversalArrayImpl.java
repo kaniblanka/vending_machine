@@ -36,15 +36,19 @@ public class UniversalArrayImpl<T> implements UniversalArray<T> {
 
     @Override
     public void delete(int index) {
-        array[index] = null;
-        for (int i = 0; i < array.length; i++) {
-            if (array[i] == null) {
-                Object tmp = array[i];
-                array[i] = array[i + 1];
-                array[i + 1] = tmp;
+        if (index < 0 || index >= array.length) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        Object[] newArray = new Object[array.length - 1];
+
+        for (int i = 0, j = 0; i < array.length; i++) {
+            if (i != index) {
+                newArray[j++] = array[i];
             }
         }
-        array = Arrays.copyOfRange(array, 0, array.length - 1);
+
+        array = newArray;
     }
 
     @Override
