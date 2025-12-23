@@ -1,0 +1,66 @@
+ls
+# проверяю, в нужной ли я папке
+
+touch commands.txt
+# создаю текстовый файл
+
+ls
+# проверяю, создался ли файл
+
+git status
+# проверка
+
+git add commands.txt
+# фиксация
+
+git commit -m "Added a commands.txt file with the commands used."
+# коммит
+
+git status
+# проверка
+
+git add src/main/java/util/UniversalArrayImpl.java
+# фиксирую изменения в файле
+
+find . -name UniversalArrayImpl.java
+# вышла ошибка, узнаю правильный путь к файлу
+
+git add ./src/util/UniversalArrayImpl.java
+# зафиксировала правильно
+
+git commit -m "Fixed a bug:
+so the code wouldn't break if index = -1 or 1000"
+# добавила коммит
+
+# повторила тоже самое со второй ошибкой
+
+git add ./src/model/PaymentAcceptor.java
+# зафиксировала создание нового интерфейса
+
+git commit -m "Created an interface for a payment  acceptor"
+# создала коммит к обновлению
+
+git add ./src/model/CoinAcceptor.java
+# зафиксировала изменение в CoinAcceptor.java
+
+git commit -m "Reworked CoinAcceptor.java"
+# сделала коммит обновления
+
+git add ./src/AppRunner.java
+# зафиксировала изменения в AppRunner.java
+
+git commit -m "Changed AppRunner:
+
+               1. CoinAcceptor to PaymentAcceptor
+               2. AppRunner constructor
+               3. getAllowedProducts() method
+               4. chooseAction() method"
+# сделала коммит
+
+git add ./src/AppRunner.java
+# зафиксировала изменения в AppRunner.java
+
+git commit -m "I fixed my error in AppRunner."
+# сделала коммит
+
+# сделала слияние с мастер через idea

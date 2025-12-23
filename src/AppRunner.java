@@ -9,7 +9,7 @@ public class AppRunner {
 
     private final UniversalArray<Product> products = new UniversalArrayImpl<>();
 
-    private final CoinAcceptor coinAcceptor;
+    private final PaymentAcceptor coinAcceptor;
 
     private static boolean isExit = false;
 
@@ -22,7 +22,7 @@ public class AppRunner {
                 new Mars(ActionLetter.F, 80),
                 new Pistachios(ActionLetter.G, 130)
         });
-        coinAcceptor = new CoinAcceptor(100);
+        coinAcceptor = new CoinAcceptor(0);
     }
 
     public static void run() {
@@ -47,7 +47,7 @@ public class AppRunner {
     private UniversalArray<Product> getAllowedProducts() {
         UniversalArray<Product> allowProducts = new UniversalArrayImpl<>();
         for (int i = 0; i < products.size(); i++) {
-            if (coinAcceptor.getAmount() >= products.get(i).getPrice()) {
+            if (coinAcceptor.canPay(products.get(i).getPrice())) {
                 allowProducts.add(products.get(i));
             }
         }
@@ -55,33 +55,37 @@ public class AppRunner {
     }
 
     private void chooseAction(UniversalArray<Product> products) {
-        print(" a - Пополнить баланс");
         showActions(products);
+        print(" a - Пополнить баланс");
         print(" h - Выйти");
+
         String action = fromConsole().substring(0, 1);
+
         if ("a".equalsIgnoreCase(action)) {
-            coinAcceptor.setAmount(coinAcceptor.getAmount() + 10);
-            print("Вы пополнили баланс на 10");
+            print("Введите сумму:");
+            int money = Integer.parseInt(fromConsole());
+            coinAcceptor.addMoney(money);
             return;
         }
+
+        if ("h".equalsIgnoreCase(action)) {
+            isExit = true;
+            return;
+        }
+
         try {
             for (int i = 0; i < products.size(); i++) {
-                if (products.get(i).getActionLetter().equals(ActionLetter.valueOf(action.toUpperCase()))) {
-                    coinAcceptor.setAmount(coinAcceptor.getAmount() - products.get(i).getPrice());
+                if (products.get(i).getActionLetter()
+                        .equals(ActionLetter.valueOf(action.toUpperCase()))) {
+
+                    coinAcceptor.pay(products.get(i).getPrice());
                     print("Вы купили " + products.get(i).getName());
-                    break;
+                    return;
                 }
             }
         } catch (IllegalArgumentException e) {
-            if ("h".equalsIgnoreCase(action)) {
-                isExit = true;
-            } else {
-                print("Недопустимая буква. Попрбуйте еще раз.");
-                chooseAction(products);
-            }
+            print("Недопустимая буква. Попробуйте еще раз.");
         }
-
-
     }
 
     private void showActions(UniversalArray<Product> products) {
